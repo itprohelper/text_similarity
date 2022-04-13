@@ -1,7 +1,5 @@
-from http import client
-from importlib.resources import Resource
 from flask import Flask, jsonify, request
-from flask-restful import Api, resource
+from flask_restful import Api, Resource
 from pymongo import MongoClient
 import bcrypt
 import spacy
@@ -127,28 +125,28 @@ class Detect(Resource):
 
         return jsonify(retJson)
 
-    class Refill(Resource):
-        def post(self):
-            postedData = request.get_json()
+class Refill(Resource):
+    def post(self):
+        postedData = request.get_json()
 
-            username = postedData["username"]
-            password = postedData["admin_pw"]
-            refill_amount = postedData["refill"]
+        username = postedData["username"]
+        password = postedData["admin_pw"]
+        refill_amount = postedData["refill"]
 
-            if not UserExist(username):
-                retJson = {
-                    "status": 301,
-                    "msg": "Invalid Username"
-                }
-                return jsonify(retJson)
+        if not UserExist(username):
+            retJson = {
+                "status": 301,
+                "msg": "Invalid Username"
+            }
+            return jsonify(retJson)
 
-            correct_pw = "abc123"
-            if not password == correct_pw:
-                retJson = {
-                    "status": 304,
-                    "msg": "Invalid Admin Password"
-                }
-                return jsonify(retJson)
+        correct_pw = "abc123"
+        if not password == correct_pw:
+            retJson = {
+                "status": 304,
+                "msg": "Invalid Admin Password"
+            }
+            return jsonify(retJson)
 
             #current_tokens = countTokens(username)
             users.update({
