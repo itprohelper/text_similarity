@@ -14,7 +14,8 @@ users = db["Users"]
 #was referring to this tutorial to fix count:
 #https://pymongo.readthedocs.io/en/stable/tutorial.html#counting
 def UserExist(username):
-    if users.find_one({"Username":username}).count_documents({}) == 0:
+    if db.users.count_documents({"Username": username}) == 0:
+    #if users.find_one({"Username":username}).count_documents({}) == 0:
         return False
     else:
         return True
@@ -35,7 +36,7 @@ class Register(Resource):
 
         hashed_pw = bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt())
 
-        users.insert({
+        users.insert_one({
             "Username": username,
             "Password": hashed_pw,
             "Tokens": 6
