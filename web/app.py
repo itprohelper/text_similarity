@@ -36,7 +36,8 @@ class Register(Resource):
 
         hashed_pw = bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt())
 
-        users.insert_one({
+        #users.insert({
+        db.users.insert_one({
             "Username": username,
             "Password": hashed_pw,
             "Tokens": 6
@@ -52,7 +53,8 @@ def verifyPw(username, password):
     if not UserExist(username):
         return False
 
-    hashed_pw = users.find({
+    #hashed_pw = users.find({
+    hashed_pw = users.find({    
         "Username": username
     })[0]["Password"]
 
