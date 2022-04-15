@@ -53,9 +53,8 @@ def verifyPw(username, password):
     if not UserExist(username):
         return False
 
-    #hashed_pw = users.find({
-    hashed_pw = users.find({    
-        "Username": username
+    hashed_pw = db.users.find_one({
+          "Username": username
     })[0]["Password"]
 
     if bcrypt.hashpw(password.encode('utf8'), hashed_pw)==hashed_pw:
@@ -64,7 +63,7 @@ def verifyPw(username, password):
         return False
 
 def countTokens(username):
-    tokens = users.find({
+    tokens = db.users.find({
         "Username": username
     })[0]["Tokens"]
     return tokens
@@ -120,7 +119,7 @@ class Detect(Resource):
 
         current_tokens = countTokens(username)
 
-        users.update({
+        db.users.update_one({
             "Username": username,
         },{
             "$set":{
@@ -153,20 +152,20 @@ class Refill(Resource):
             }
             return jsonify(retJson)
 
-            #current_tokens = countTokens(username)
-            users.update({
-                "Username": username
-            }, {
-                "$set":{
-                    "Tokens": refill_amount
-                }
-            })
+        
+        db.users.update_one({
+            "Username": username
+        }, {
+            "$set":{
+                "Tokens": refill_amount
+        }
+        })
 
-            retJson = {
-                "status": 200,
-                "msg": "Refilled successfully"
-            }
-            return jsonify(retJson)
+        retJson = {
+            "status": 200,
+            "msg": "Refilled successfully"
+        }
+        return jsonify(retJson)
 
 api.add_resource(Register, '/register')
 api.add_resource(Detect, '/detect')
