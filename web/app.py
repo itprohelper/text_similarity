@@ -53,7 +53,7 @@ def verifyPw(username, password):
     if not UserExist(username):
         return False
 
-    hashed_pw = db.users.find_one({
+    hashed_pw = db.users.find({
           "Username": username
     })[0]["Password"]
 
@@ -152,7 +152,7 @@ class Refill(Resource):
             }
             return jsonify(retJson)
 
-        
+
         db.users.update_one({
             "Username": username
         }, {
