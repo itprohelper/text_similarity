@@ -144,7 +144,7 @@ class Refill(Resource):
             }
             return jsonify(retJson)
 
-        correct_pw = "abc123"
+        correct_pw = "abc123" #admin password to refill tokens
         if not password == correct_pw:
             retJson = {
                 "status": 304,
